@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "scav_rating",
+  "version": "${version}",
+  "name": "Scavenger Rating Addon",
+  "description": "Adds global speedrun leaderboards for Scavenger.",
+  "authors": [
+    "toxin"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "ru.toxin.scavrating.ScavRating"
+    ]
+  },
+  "mixins": [
+    "scav_rating.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "~${minecraft_version}",
+    "scavenger": "*"
+  }
+}

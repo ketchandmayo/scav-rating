@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "ru.toxin.scavrating.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ScavengerMixin"
+  ],
+  "client": [
+    "VictoryScreenMixin",
+    "ScavengerClientMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
