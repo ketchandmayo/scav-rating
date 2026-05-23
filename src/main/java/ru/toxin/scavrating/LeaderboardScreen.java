@@ -41,10 +41,10 @@ public class LeaderboardScreen extends Screen {
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         guiGraphics.fill(0, 0, this.width, this.height, 0xAA000000);
-        guiGraphics.drawCenteredString(this.font, this.title, this.width / 2, 20, 0xFFFFFF);
+        guiGraphics.drawCenteredString(this.font, this.title, this.width / 2, 20, 0xFFFFFFFF);
 
         if (leaderboardData == null) {
-            guiGraphics.drawCenteredString(this.font, Component.literal("Loading..."), this.width / 2, 50, 0xAAAAAA);
+            drawCenteredStringSafe(guiGraphics, Component.literal("Loading..."), this.width / 2, 50, 0xFFAAAAAA);
         } else {
             int y = 50;
             for (int i = 0; i < leaderboardData.size() && i < 10; i++) {
@@ -52,12 +52,53 @@ public class LeaderboardScreen extends Screen {
                 String name = entry.get("player_name").getAsString();
                 long ticks = entry.get("time_ticks").getAsLong();
                 String timeStr = formatTicks(ticks);
-                guiGraphics.drawString(this.font, Component.literal((i + 1) + ". " + name + " - " + timeStr), this.width / 2 - 100, y, 0xFFFFFF);
+                drawStringSafe(guiGraphics, Component.literal((i + 1) + ". " + name + " - " + timeStr), this.width / 2 - 100, y, 0xFFFFFFFF);
                 y += 15;
             }
         }
 
         super.render(guiGraphics, mouseX, mouseY, partialTick);
+    }
+
+    private static java.lang.reflect.Method drawStringMethod;
+    private static java.lang.reflect.Method drawCenteredStringMethod;
+
+    private void drawStringSafe(GuiGraphics guiGraphics, Component component, int x, int y, int color) {
+        if (drawStringMethod == null) {
+            for (java.lang.reflect.Method m : guiGraphics.getClass().getMethods()) {
+                Class<?>[] p = m.getParameterTypes();
+                if (p.length == 5 && p[0] == net.minecraft.client.gui.Font.class && p[1] == net.minecraft.network.chat.Component.class) {
+                    if (m.getName().equals("method_27535") || m.getName().equals("drawString")) {
+                        drawStringMethod = m;
+                        break;
+                    }
+                }
+            }
+        }
+        if (drawStringMethod != null) {
+            try {
+                drawStringMethod.invoke(guiGraphics, this.font, component, x, y, color);
+            } catch (Exception e) {}
+        }
+    }
+
+    private void drawCenteredStringSafe(GuiGraphics guiGraphics, Component component, int x, int y, int color) {
+        if (drawCenteredStringMethod == null) {
+            for (java.lang.reflect.Method m : guiGraphics.getClass().getMethods()) {
+                Class<?>[] p = m.getParameterTypes();
+                if (p.length == 5 && p[0] == net.minecraft.client.gui.Font.class && p[1] == net.minecraft.network.chat.Component.class) {
+                    if (m.getName().equals("method_27534") || m.getName().equals("drawCenteredString")) {
+                        drawCenteredStringMethod = m;
+                        break;
+                    }
+                }
+            }
+        }
+        if (drawCenteredStringMethod != null) {
+            try {
+                drawCenteredStringMethod.invoke(guiGraphics, this.font, component, x, y, color);
+            } catch (Exception e) {}
+        }
     }
 
     private String formatTicks(long totalTicks) {
