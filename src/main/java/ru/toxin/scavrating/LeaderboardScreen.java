@@ -74,8 +74,16 @@ public class LeaderboardScreen extends Screen {
                 JsonObject entry = leaderboardData.get(i).getAsJsonObject();
                 String name = entry.get("player_name").getAsString();
                 long ticks = entry.get("time_ticks").getAsLong();
+                String itemStr = entry.get("item_id").getAsString();
+                String modStr = entry.get("modifier_id").getAsString();
+                String seedStr = entry.get("seed").getAsString();
+
                 String timeStr = formatTicks(ticks);
-                drawStringSafe(guiGraphics, Component.literal((i + 1) + ". " + name + " - " + timeStr), this.width / 2 - 100, y, 0xFFFFFFFF);
+                String itemShort = itemStr.contains(":") ? itemStr.substring(itemStr.indexOf(":") + 1) : itemStr;
+                String modShort = modStr.contains(":") ? modStr.substring(modStr.indexOf(":") + 1) : modStr;
+
+                String rowText = String.format("%d. %s | %s | %s | %s | Seed: %s", i + 1, name, timeStr, itemShort, modShort, seedStr);
+                drawCenteredStringSafe(guiGraphics, Component.literal(rowText), this.width / 2, y, 0xFFFFFFFF);
                 y += 15;
             }
         }
@@ -125,10 +133,15 @@ public class LeaderboardScreen extends Screen {
     }
 
     private String formatTicks(long totalTicks) {
-        long totalSeconds = totalTicks / 20;
-        long hours = totalSeconds / 3600;
-        long minutes = (totalSeconds % 3600) / 60;
-        long seconds = totalSeconds % 60;
-        return String.format("%d:%02d:%02d", hours, minutes, seconds);
+        long totalMs = totalTicks * 50;
+        long hours = totalMs / 3600000;
+        long minutes = (totalMs % 3600000) / 60000;
+        long seconds = (totalMs % 60000) / 1000;
+        long ms = totalMs % 1000;
+        if (hours > 0) {
+            return String.format("%d:%02d:%02d.%03d", hours, minutes, seconds, ms);
+        } else {
+            return String.format("%02d:%02d.%03d", minutes, seconds, ms);
+        }
     }
 }
