@@ -28,11 +28,13 @@ public class ScavengerMixin {
     private static String getSeedSafe(ServerPlayer player) {
         try {
             for (java.lang.reflect.Method m : player.getClass().getMethods()) {
-                String name = m.getName();
-                if ((name.equals("method_37908") || name.equals("level") || name.equals("serverLevel") || name.equals("getWorld")) && m.getParameterCount() == 0) {
+                if (m.getParameterCount() == 0 && net.minecraft.world.level.Level.class.isAssignableFrom(m.getReturnType())) {
                     Object levelObj = m.invoke(player);
                     if (levelObj instanceof net.minecraft.server.level.ServerLevel) {
-                        return String.valueOf(((net.minecraft.server.level.ServerLevel) levelObj).getSeed());
+                        long seed = ((net.minecraft.server.level.ServerLevel) levelObj).getSeed();
+                        if (seed != 0L) {
+                            return String.valueOf(seed);
+                        }
                     }
                 }
             }
