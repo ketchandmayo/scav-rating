@@ -14,5 +14,6 @@
   "scav_rating.gui.select_modifier": "Select Modifier Filter",
   "scav_rating.gui.prev": "< Prev",
   "scav_rating.gui.next": "Next >",
-  "scav_rating.gui.cheats_detected": "[Scavenger Rating] Cheats detected! Your current run will not be recorded on the leaderboard."
+  "scav_rating.gui.cheats_detected": "[Scavenger Rating] Cheats detected! Your current run will not be recorded on the leaderboard.",
+  "scavenger.modifier.none": "None"
 }

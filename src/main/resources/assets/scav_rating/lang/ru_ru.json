@@ -14,5 +14,6 @@
   "scav_rating.gui.select_modifier": "Выберите модификатор",
   "scav_rating.gui.prev": "< Назад",
   "scav_rating.gui.next": "Вперед >",
-  "scav_rating.gui.cheats_detected": "[Scavenger Rating] Обнаружены читы! Ваш текущий забег не будет записан в таблицу рекордов."
+  "scav_rating.gui.cheats_detected": "[Scavenger Rating] Обнаружены читы! Ваш текущий забег не будет записан в таблицу рекордов.",
+  "scavenger.modifier.none": "Нет"
 }
