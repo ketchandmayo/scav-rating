@@ -11,7 +11,7 @@ Have you ever wanted to know who the fastest Scavenger player is? Now you can! T
 - **Multi-Language:** Fully translated into English and Russian.
 
 ### ⚙️ Requirements
-- **Minecraft 1.21.1**
+- **Minecraft 1.21.11**
 - **Fabric Loader** & **Fabric API**
 - **Scavenger mod** (Required dependency)
 

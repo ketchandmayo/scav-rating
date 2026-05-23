@@ -9,7 +9,7 @@ A Fabric addon for the Scavenger mod that adds global speedrun leaderboards! Com
 - **Localization**: Full support for English and Russian languages.
 
 ## Requirements
-- Minecraft 1.21.1
+- Minecraft 1.21.11
 - Fabric Loader
 - Fabric API
 - Scavenger mod
@@ -24,7 +24,6 @@ A Fabric addon for the Scavenger mod that adds global speedrun leaderboards! Com
 ## Building from source
 ```bash
 git clone https://github.com/ketchandmayo/scav-rating.git
-cd scav-rating/addon
 ./gradlew build
 ```
 
@@ -32,4 +31,4 @@ cd scav-rating/addon
 This mod communicates with a custom backend server to store leaderboard data. The backend is written in Go and uses SQLite. If you want to host your own leaderboard server, check the `backend` folder for the Go source code.
 
 ## License
-MIT
+GPLv3
