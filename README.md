@@ -28,7 +28,7 @@ git clone https://github.com/ketchandmayo/scav-rating.git
 ```
 
 ## Backend Server
-This mod communicates with a custom backend server to store leaderboard data. The backend is written in Go and uses SQLite. If you want to host your own leaderboard server, check the `backend` folder for the Go source code.
+This mod communicates with a custom backend server to store leaderboard data. The backend is written in Go and uses SQLite.
 
 ## License
 GPLv3

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Item;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.core.registries.BuiltInRegistries;
 
 public class LeaderboardScreen extends Screen {
@@ -93,9 +93,9 @@ public class LeaderboardScreen extends Screen {
 
     private Item getItemSafe(String itemId) {
         try {
-            ResourceLocation loc = ResourceLocation.parse(itemId);
+            Identifier loc = Identifier.parse(itemId);
             for (java.lang.reflect.Method m : BuiltInRegistries.ITEM.getClass().getMethods()) {
-                if (m.getParameterCount() == 1 && m.getParameterTypes()[0] == ResourceLocation.class) {
+                if (m.getParameterCount() == 1 && m.getParameterTypes()[0] == Identifier.class) {
                     Object res = m.invoke(BuiltInRegistries.ITEM, loc);
                     if (res instanceof Item) {
                         return (Item) res;

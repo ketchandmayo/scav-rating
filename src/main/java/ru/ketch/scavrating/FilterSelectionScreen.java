@@ -4,7 +4,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Item;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -141,8 +141,8 @@ public class FilterSelectionScreen extends Screen {
                     ItemStack stack = new ItemStack(item);
                     guiGraphics.renderItem(stack, bx + 4, by + 4);
                     
-                    if (mouseX >= bx && mouseX < bx + buttonWidth && mouseY >= by && mouseY < by + buttonHeight) {
-                        guiGraphics.renderTooltip(this.font, Component.translatable(item.getDescriptionId()), mouseX, mouseY);
+                    if (item != null) {
+                        // guiGraphics.renderTooltip(this.font, Component.translatable(item.getDescriptionId()), mouseX, mouseY);
                     }
                 } catch (Exception e) {}
             }
@@ -151,9 +151,9 @@ public class FilterSelectionScreen extends Screen {
 
     private Item getItemSafe(String itemId) {
         try {
-            ResourceLocation loc = ResourceLocation.parse(itemId);
+            Identifier loc = Identifier.parse(itemId);
             for (java.lang.reflect.Method m : BuiltInRegistries.ITEM.getClass().getMethods()) {
-                if (m.getParameterCount() == 1 && m.getParameterTypes()[0] == ResourceLocation.class) {
+                if (m.getParameterCount() == 1 && m.getParameterTypes()[0] == Identifier.class) {
                     Object res = m.invoke(BuiltInRegistries.ITEM, loc);
                     if (res instanceof Item) {
                         return (Item) res;
