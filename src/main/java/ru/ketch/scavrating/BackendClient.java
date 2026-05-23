@@ -9,11 +9,30 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.security.MessageDigest;
 import java.util.concurrent.CompletableFuture;
 
 public class BackendClient {
     private static final HttpClient client = HttpClient.newHttpClient();
     private static final Gson gson = new Gson();
+    private static final String SECRET = "ScavRatingSecret2026_xyz";
+
+    private static String generateSignature(String playerName, long timeTicks) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            String payload = playerName + ":" + timeTicks + ":" + SECRET;
+            byte[] hash = digest.digest(payload.getBytes("UTF-8"));
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (Exception e) {
+            return "";
+        }
+    }
 
     public static void submitRun(String playerName, String playerUuid, String itemId, String modifierId, long timeTicks, String seed) {
         JsonObject json = new JsonObject();
@@ -27,6 +46,7 @@ public class BackendClient {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(ScavRating.BACKEND_URL + "/api/runs"))
                 .header("Content-Type", "application/json")
+                .header("X-Scav-Signature", generateSignature(playerName, timeTicks))
                 .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(json)))
                 .build();
 
