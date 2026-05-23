@@ -61,14 +61,14 @@ public class LeaderboardScreen extends Screen {
         }).bounds(this.width / 2 - 100, buttonY, 200, 20).build());
 
         this.addRenderableWidget(Button.builder(Component.literal("Item: " + getShortName(filterItemId)), b -> {
-            this.minecraft.setScreen(new FilterSelectionScreen(this, true, availableItems, selected -> {
+            this.minecraft.setScreen(new FilterSelectionScreen(this, true, availableItems, filterItemId, selected -> {
                 this.filterItemId = selected;
                 this.refreshData();
             }));
         }).bounds(this.width / 2 - 155, 25, 150, 20).build());
 
         this.addRenderableWidget(Button.builder(Component.literal("Modifier: " + getShortName(filterModifierId)), b -> {
-            this.minecraft.setScreen(new FilterSelectionScreen(this, false, availableModifiers, selected -> {
+            this.minecraft.setScreen(new FilterSelectionScreen(this, false, availableModifiers, filterModifierId, selected -> {
                 this.filterModifierId = selected;
                 this.refreshData();
             }));

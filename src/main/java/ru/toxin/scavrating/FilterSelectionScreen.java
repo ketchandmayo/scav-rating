@@ -16,15 +16,17 @@ public class FilterSelectionScreen extends Screen {
     private final Screen parent;
     private final boolean isItemFilter;
     private final List<String> options;
+    private final String currentSelection;
     private final Consumer<String> onSelected;
     private int currentPage = 0;
     private final int itemsPerPage = 20;
 
-    public FilterSelectionScreen(Screen parent, boolean isItemFilter, List<String> options, Consumer<String> onSelected) {
+    public FilterSelectionScreen(Screen parent, boolean isItemFilter, List<String> options, String currentSelection, Consumer<String> onSelected) {
         super(Component.literal(isItemFilter ? "Select Item Filter" : "Select Modifier Filter"));
         this.parent = parent;
         this.isItemFilter = isItemFilter;
         this.options = options;
+        this.currentSelection = currentSelection;
         this.onSelected = onSelected;
     }
 
@@ -97,21 +99,34 @@ public class FilterSelectionScreen extends Screen {
         guiGraphics.fill(0, 0, this.width, this.height, 0xAA000000);
         guiGraphics.drawCenteredString(this.font, this.title, this.width / 2, 10, 0xFFFFFFFF);
         
+        // Draw highlight behind the selected option
+        int startIdx = currentPage * itemsPerPage;
+        int endIdx = Math.min(startIdx + itemsPerPage, options.size());
+        int cols = 5;
+        int buttonWidth = isItemFilter ? 24 : 100;
+        int buttonHeight = isItemFilter ? 24 : 20;
+        int spacingX = isItemFilter ? 30 : 110;
+        int spacingY = isItemFilter ? 30 : 25;
+        int startX = this.width / 2 - (cols * spacingX) / 2 + (spacingX - buttonWidth) / 2;
+        int startY = 60;
+
+        for (int i = startIdx; i < endIdx; i++) {
+            String optionId = options.get(i);
+            if (optionId.equals(currentSelection)) {
+                int relIdx = i - startIdx;
+                int col = relIdx % cols;
+                int row = relIdx / cols;
+                int bx = startX + col * spacingX;
+                int by = startY + row * spacingY;
+                
+                // Draw a gold border around the selected button
+                guiGraphics.fill(bx - 2, by - 2, bx + buttonWidth + 2, by + buttonHeight + 2, 0xFFFFAA00);
+            }
+        }
+
         super.render(guiGraphics, mouseX, mouseY, partialTick);
 
         if (isItemFilter) {
-            int startIdx = currentPage * itemsPerPage;
-            int endIdx = Math.min(startIdx + itemsPerPage, options.size());
-
-            int cols = 5;
-            int buttonWidth = 24;
-            int buttonHeight = 24;
-            int spacingX = 30;
-            int spacingY = 30;
-
-            int startX = this.width / 2 - (cols * spacingX) / 2 + (spacingX - buttonWidth) / 2;
-            int startY = 60;
-
             for (int i = startIdx; i < endIdx; i++) {
                 String optionId = options.get(i);
                 int relIdx = i - startIdx;
