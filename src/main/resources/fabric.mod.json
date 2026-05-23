@@ -3,12 +3,16 @@
   "id": "scav_rating",
   "version": "${version}",
   "name": "Scavenger Rating Addon",
-  "description": "Adds global speedrun leaderboards for Scavenger.",
+  "description": "Adds global speedrun leaderboards for Scavenger mod.",
   "authors": [
     "ketch"
   ],
-  "contact": {},
-  "license": "MIT",
+  "contact": {
+    "homepage": "https://github.com/ketchandmayo",
+    "sources": "https://github.com/ketchandmayo/scav-rating",
+    "issues": "https://github.com/ketchandmayo/scav-rating/issues"
+  },
+  "license": "GPLv3",
   "environment": "*",
   "entrypoints": {
     "main": [
