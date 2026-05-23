@@ -66,4 +66,19 @@ public class BackendClient {
                     return new JsonArray();
                 });
     }
+
+    public static CompletableFuture<JsonObject> getFilters() {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(ScavRating.BACKEND_URL + "/api/filters"))
+                .GET()
+                .build();
+
+        return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(response -> {
+                    if (response.statusCode() == 200) {
+                        return JsonParser.parseString(response.body()).getAsJsonObject();
+                    }
+                    return new JsonObject();
+                });
+    }
 }

@@ -7,14 +7,24 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.registries.BuiltInRegistries;
+
 public class LeaderboardScreen extends Screen {
     private final Screen parent;
     private final String itemId;
     private final String modifierId;
     private final Runnable onStartRun;
     private JsonArray leaderboardData = null;
-    private boolean filterAllItems = false;
-    private boolean filterAllModifiers = false;
+    
+    private String filterItemId = "";
+    private String filterModifierId = "";
+    private List<String> availableItems = new ArrayList<>();
+    private List<String> availableModifiers = new ArrayList<>();
 
     public LeaderboardScreen(Screen parent, String itemId, String modifierId, Runnable onStartRun) {
         super(Component.literal("Leaderboard"));
@@ -22,11 +32,24 @@ public class LeaderboardScreen extends Screen {
         this.itemId = itemId;
         this.modifierId = modifierId;
         this.onStartRun = onStartRun;
+        this.filterItemId = itemId;
+        this.filterModifierId = modifierId;
     }
 
     @Override
     protected void init() {
         refreshData();
+        
+        BackendClient.getFilters().thenAccept(filters -> {
+            if (filters.has("items")) {
+                availableItems.clear();
+                filters.getAsJsonArray("items").forEach(e -> availableItems.add(e.getAsString()));
+            }
+            if (filters.has("modifiers")) {
+                availableModifiers.clear();
+                filters.getAsJsonArray("modifiers").forEach(e -> availableModifiers.add(e.getAsString()));
+            }
+        });
 
         int buttonY = this.height - 30;
         this.addRenderableWidget(Button.builder(Component.literal(onStartRun != null ? "Start Run" : "Back"), b -> {
@@ -37,32 +60,60 @@ public class LeaderboardScreen extends Screen {
             }
         }).bounds(this.width / 2 - 100, buttonY, 200, 20).build());
 
-        this.addRenderableWidget(Button.builder(Component.literal("Item: Current"), b -> {
-            filterAllItems = !filterAllItems;
-            b.setMessage(Component.literal("Item: " + (filterAllItems ? "All" : "Current")));
-            refreshData();
+        this.addRenderableWidget(Button.builder(Component.literal("Item: " + getShortName(filterItemId)), b -> {
+            this.minecraft.setScreen(new FilterSelectionScreen(this, true, availableItems, selected -> {
+                this.filterItemId = selected;
+                this.refreshData();
+            }));
         }).bounds(this.width / 2 - 155, 25, 150, 20).build());
 
-        this.addRenderableWidget(Button.builder(Component.literal("Modifier: Current"), b -> {
-            filterAllModifiers = !filterAllModifiers;
-            b.setMessage(Component.literal("Modifier: " + (filterAllModifiers ? "All" : "Current")));
-            refreshData();
+        this.addRenderableWidget(Button.builder(Component.literal("Modifier: " + getShortName(filterModifierId)), b -> {
+            this.minecraft.setScreen(new FilterSelectionScreen(this, false, availableModifiers, selected -> {
+                this.filterModifierId = selected;
+                this.refreshData();
+            }));
         }).bounds(this.width / 2 + 5, 25, 150, 20).build());
+    }
+
+    private String getShortName(String id) {
+        if (id == null || id.isEmpty()) return "All";
+        return id.contains(":") ? id.substring(id.indexOf(":") + 1) : id;
     }
 
     private void refreshData() {
         this.leaderboardData = null;
-        String queryItem = filterAllItems ? "" : this.itemId;
-        String queryModifier = filterAllModifiers ? "" : this.modifierId;
-        BackendClient.getLeaderboard(queryItem, queryModifier).thenAccept(data -> {
+        BackendClient.getLeaderboard(filterItemId, filterModifierId).thenAccept(data -> {
             this.leaderboardData = data;
         });
+    }
+
+    private Item getItemSafe(String itemId) {
+        try {
+            ResourceLocation loc = ResourceLocation.parse(itemId);
+            for (java.lang.reflect.Method m : BuiltInRegistries.ITEM.getClass().getMethods()) {
+                if (m.getParameterCount() == 1 && m.getParameterTypes()[0] == ResourceLocation.class) {
+                    Object res = m.invoke(BuiltInRegistries.ITEM, loc);
+                    if (res instanceof Item) {
+                        return (Item) res;
+                    }
+                }
+            }
+        } catch (Exception e) {}
+        return net.minecraft.world.item.Items.STONE;
     }
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         guiGraphics.fill(0, 0, this.width, this.height, 0xAA000000);
         guiGraphics.drawCenteredString(this.font, this.title, this.width / 2, 10, 0xFFFFFFFF);
+
+        if (!filterItemId.isEmpty()) {
+            try {
+                Item item = getItemSafe(filterItemId);
+                ItemStack stack = new ItemStack(item);
+                guiGraphics.renderItem(stack, this.width / 2 - 155 - 20, 27);
+            } catch (Exception e) {}
+        }
 
         if (leaderboardData == null) {
             drawCenteredStringSafe(guiGraphics, Component.literal("Loading..."), this.width / 2, 60, 0xFFAAAAAA);
