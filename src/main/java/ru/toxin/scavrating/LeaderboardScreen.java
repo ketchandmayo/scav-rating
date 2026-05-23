@@ -13,6 +13,8 @@ public class LeaderboardScreen extends Screen {
     private final String modifierId;
     private final Runnable onStartRun;
     private JsonArray leaderboardData = null;
+    private boolean filterAllItems = false;
+    private boolean filterAllModifiers = false;
 
     public LeaderboardScreen(Screen parent, String itemId, String modifierId, Runnable onStartRun) {
         super(Component.literal("Leaderboard"));
@@ -24,9 +26,7 @@ public class LeaderboardScreen extends Screen {
 
     @Override
     protected void init() {
-        BackendClient.getLeaderboard(itemId, modifierId).thenAccept(data -> {
-            this.leaderboardData = data;
-        });
+        refreshData();
 
         int buttonY = this.height - 30;
         this.addRenderableWidget(Button.builder(Component.literal(onStartRun != null ? "Start Run" : "Back"), b -> {
@@ -36,17 +36,40 @@ public class LeaderboardScreen extends Screen {
                 this.minecraft.setScreen(parent);
             }
         }).bounds(this.width / 2 - 100, buttonY, 200, 20).build());
+
+        this.addRenderableWidget(Button.builder(Component.literal("Item: Current"), b -> {
+            filterAllItems = !filterAllItems;
+            b.setMessage(Component.literal("Item: " + (filterAllItems ? "All" : "Current")));
+            refreshData();
+        }).bounds(this.width / 2 - 155, 25, 150, 20).build());
+
+        this.addRenderableWidget(Button.builder(Component.literal("Modifier: Current"), b -> {
+            filterAllModifiers = !filterAllModifiers;
+            b.setMessage(Component.literal("Modifier: " + (filterAllModifiers ? "All" : "Current")));
+            refreshData();
+        }).bounds(this.width / 2 + 5, 25, 150, 20).build());
+    }
+
+    private void refreshData() {
+        this.leaderboardData = null;
+        String queryItem = filterAllItems ? "" : this.itemId;
+        String queryModifier = filterAllModifiers ? "" : this.modifierId;
+        BackendClient.getLeaderboard(queryItem, queryModifier).thenAccept(data -> {
+            this.leaderboardData = data;
+        });
     }
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         guiGraphics.fill(0, 0, this.width, this.height, 0xAA000000);
-        guiGraphics.drawCenteredString(this.font, this.title, this.width / 2, 20, 0xFFFFFFFF);
+        guiGraphics.drawCenteredString(this.font, this.title, this.width / 2, 10, 0xFFFFFFFF);
 
         if (leaderboardData == null) {
-            drawCenteredStringSafe(guiGraphics, Component.literal("Loading..."), this.width / 2, 50, 0xFFAAAAAA);
+            drawCenteredStringSafe(guiGraphics, Component.literal("Loading..."), this.width / 2, 60, 0xFFAAAAAA);
+        } else if (leaderboardData.size() == 0) {
+            drawCenteredStringSafe(guiGraphics, Component.literal("No runs found for these filters."), this.width / 2, 60, 0xFFFF5555);
         } else {
-            int y = 50;
+            int y = 60;
             for (int i = 0; i < leaderboardData.size() && i < 10; i++) {
                 JsonObject entry = leaderboardData.get(i).getAsJsonObject();
                 String name = entry.get("player_name").getAsString();
