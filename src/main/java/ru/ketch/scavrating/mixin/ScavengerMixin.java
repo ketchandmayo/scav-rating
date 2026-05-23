@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import ru.ketch.scavrating.BackendClient;
+import ru.ketch.scavrating.CheatTracker;
 
 @Mixin(Scavenger.class)
 public class ScavengerMixin {
@@ -21,7 +22,10 @@ public class ScavengerMixin {
             long timeTicks = data.getWinTimestamp();
             String seed = getSeedSafe(player);
 
-            BackendClient.submitRun(playerName, playerUuid, itemId, modifierId, timeTicks, seed);
+            if (!CheatTracker.hasCheated(player.getUUID())) {
+                BackendClient.submitRun(playerName, playerUuid, itemId, modifierId, timeTicks, seed);
+            }
+            CheatTracker.clear(player.getUUID());
         }
     }
 
