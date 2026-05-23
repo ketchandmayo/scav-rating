@@ -69,7 +69,15 @@ public class LeaderboardScreen extends Screen {
         } else if (leaderboardData.size() == 0) {
             drawCenteredStringSafe(guiGraphics, Component.literal("No runs found for these filters."), this.width / 2, 60, 0xFFFF5555);
         } else {
-            int y = 60;
+            int cx = this.width / 2;
+            // Draw table headers
+            drawStringSafe(guiGraphics, Component.literal("Player"), cx - 180, 50, 0xFFFFFF55);
+            drawStringSafe(guiGraphics, Component.literal("Time"), cx - 60, 50, 0xFFFFFF55);
+            drawStringSafe(guiGraphics, Component.literal("Item"), cx + 5, 50, 0xFFFFFF55);
+            drawStringSafe(guiGraphics, Component.literal("Modifier"), cx + 105, 50, 0xFFFFFF55);
+            drawStringSafe(guiGraphics, Component.literal("Seed"), cx + 175, 50, 0xFFFFFF55);
+
+            int y = 65;
             for (int i = 0; i < leaderboardData.size() && i < 10; i++) {
                 JsonObject entry = leaderboardData.get(i).getAsJsonObject();
                 String name = entry.get("player_name").getAsString();
@@ -82,8 +90,11 @@ public class LeaderboardScreen extends Screen {
                 String itemShort = itemStr.contains(":") ? itemStr.substring(itemStr.indexOf(":") + 1) : itemStr;
                 String modShort = modStr.contains(":") ? modStr.substring(modStr.indexOf(":") + 1) : modStr;
 
-                String rowText = String.format("%d. %s | %s | %s | %s | Seed: %s", i + 1, name, timeStr, itemShort, modShort, seedStr);
-                drawCenteredStringSafe(guiGraphics, Component.literal(rowText), this.width / 2, y, 0xFFFFFFFF);
+                drawStringSafe(guiGraphics, Component.literal(String.format("%d. %s", i + 1, name)), cx - 180, y, 0xFFFFFFFF);
+                drawStringSafe(guiGraphics, Component.literal(timeStr), cx - 60, y, 0xFFFFFFFF);
+                drawStringSafe(guiGraphics, Component.literal(itemShort), cx + 5, y, 0xFFFFFFFF);
+                drawStringSafe(guiGraphics, Component.literal(modShort), cx + 105, y, 0xFFFFFFFF);
+                drawStringSafe(guiGraphics, Component.literal(seedStr), cx + 175, y, 0xFFAAAAAA);
                 y += 15;
             }
         }
