@@ -5,14 +5,14 @@
   "name": "Scavenger Rating Addon",
   "description": "Adds global speedrun leaderboards for Scavenger.",
   "authors": [
-    "toxin"
+    "ketch"
   ],
   "contact": {},
   "license": "MIT",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "ru.toxin.scavrating.ScavRating"
+      "ru.ketch.scavrating.ScavRating"
     ]
   },
   "mixins": [

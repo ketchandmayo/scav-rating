@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "ru.toxin.scavrating.mixin",
+  "package": "ru.ketch.scavrating.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "ScavengerMixin"

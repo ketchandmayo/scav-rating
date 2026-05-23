@@ -1,4 +1,4 @@
-package ru.toxin.scavrating.mixin;
+package ru.ketch.scavrating.mixin;
 
 import meow.binary.scavenger.client.screen.ScavengerWorldCreateScreen;
 import net.minecraft.resources.ResourceLocation;
@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.client.Minecraft;
-import ru.toxin.scavrating.LeaderboardScreen;
+import ru.ketch.scavrating.LeaderboardScreen;
 
 @Mixin(ScavengerWorldCreateScreen.class)
 public class ScavengerClientMixin {

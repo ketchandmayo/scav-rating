@@ -1,4 +1,4 @@
-package ru.toxin.scavrating.mixin;
+package ru.ketch.scavrating.mixin;
 
 import meow.binary.scavenger.client.ClientScavengerData;
 import meow.binary.scavenger.client.screen.VictoryScreen;
@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import ru.toxin.scavrating.LeaderboardScreen;
+import ru.ketch.scavrating.LeaderboardScreen;
 
 @Mixin(VictoryScreen.class)
 public abstract class VictoryScreenMixin extends Screen {

@@ -1,4 +1,4 @@
-package ru.toxin.scavrating;
+package ru.ketch.scavrating;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

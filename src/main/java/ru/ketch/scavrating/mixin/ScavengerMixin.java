@@ -1,4 +1,4 @@
-package ru.toxin.scavrating.mixin;
+package ru.ketch.scavrating.mixin;
 
 import meow.binary.scavenger.Scavenger;
 import meow.binary.scavenger.data.ScavengerSavedData;
@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import ru.toxin.scavrating.BackendClient;
+import ru.ketch.scavrating.BackendClient;
 
 @Mixin(Scavenger.class)
 public class ScavengerMixin {

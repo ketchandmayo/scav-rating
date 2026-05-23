@@ -1,4 +1,4 @@
-package ru.toxin.scavrating;
+package ru.ketch.scavrating;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
