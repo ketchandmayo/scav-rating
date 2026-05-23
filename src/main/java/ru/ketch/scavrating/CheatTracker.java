@@ -24,7 +24,7 @@ public class CheatTracker {
         if (time != null && System.currentTimeMillis() >= time) {
             warningTimers.remove(player.getUUID());
             try {
-                ((net.minecraft.world.entity.player.Player) player).displayClientMessage(Component.literal("§c[Scavenger Rating] Cheats detected! Your current run will not be recorded on the leaderboard."), false);
+                ((net.minecraft.world.entity.player.Player) player).displayClientMessage(Component.translatable("scav_rating.gui.cheats_detected").withStyle(net.minecraft.ChatFormatting.RED), false);
             } catch (Throwable t) {
                 // Ignore if method not found in some mappings
             }
