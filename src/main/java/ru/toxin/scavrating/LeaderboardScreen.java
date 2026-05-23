@@ -27,7 +27,7 @@ public class LeaderboardScreen extends Screen {
     private List<String> availableModifiers = new ArrayList<>();
 
     public LeaderboardScreen(Screen parent, String itemId, String modifierId, Runnable onStartRun) {
-        super(Component.literal("Leaderboard"));
+        super(Component.translatable("scav_rating.gui.leaderboard"));
         this.parent = parent;
         this.itemId = itemId;
         this.modifierId = modifierId;
@@ -52,7 +52,7 @@ public class LeaderboardScreen extends Screen {
         });
 
         int buttonY = this.height - 30;
-        this.addRenderableWidget(Button.builder(Component.literal(onStartRun != null ? "Start Run" : "Back"), b -> {
+        this.addRenderableWidget(Button.builder(onStartRun != null ? Component.translatable("scav_rating.gui.start_run") : Component.translatable("scav_rating.gui.back"), b -> {
             if (onStartRun != null) {
                 onStartRun.run();
             } else {
@@ -60,14 +60,18 @@ public class LeaderboardScreen extends Screen {
             }
         }).bounds(this.width / 2 - 100, buttonY, 200, 20).build());
 
-        this.addRenderableWidget(Button.builder(Component.literal("Item: " + getShortName(filterItemId)), b -> {
+        Component itemLabel = Component.translatable("scav_rating.gui.item").append(": ")
+                .append(filterItemId.isEmpty() ? Component.translatable("scav_rating.gui.all") : Component.translatable(getItemSafe(filterItemId).getDescriptionId()));
+        this.addRenderableWidget(Button.builder(itemLabel, b -> {
             this.minecraft.setScreen(new FilterSelectionScreen(this, true, availableItems, filterItemId, selected -> {
                 this.filterItemId = selected;
                 this.refreshData();
             }));
         }).bounds(this.width / 2 - 155, 25, 150, 20).build());
 
-        this.addRenderableWidget(Button.builder(Component.literal("Modifier: " + getShortName(filterModifierId)), b -> {
+        Component modLabel = Component.translatable("scav_rating.gui.modifier").append(": ")
+                .append(filterModifierId.isEmpty() ? Component.translatable("scav_rating.gui.all") : Component.translatable("scavenger.modifier." + getShortName(filterModifierId)));
+        this.addRenderableWidget(Button.builder(modLabel, b -> {
             this.minecraft.setScreen(new FilterSelectionScreen(this, false, availableModifiers, filterModifierId, selected -> {
                 this.filterModifierId = selected;
                 this.refreshData();
@@ -116,17 +120,17 @@ public class LeaderboardScreen extends Screen {
         }
 
         if (leaderboardData == null) {
-            drawCenteredStringSafe(guiGraphics, Component.literal("Loading..."), this.width / 2, 60, 0xFFAAAAAA);
+            drawCenteredStringSafe(guiGraphics, Component.translatable("scav_rating.gui.loading"), this.width / 2, 60, 0xFFAAAAAA);
         } else if (leaderboardData.size() == 0) {
-            drawCenteredStringSafe(guiGraphics, Component.literal("No runs found for these filters."), this.width / 2, 60, 0xFFFF5555);
+            drawCenteredStringSafe(guiGraphics, Component.translatable("scav_rating.gui.no_runs"), this.width / 2, 60, 0xFFFF5555);
         } else {
             int cx = this.width / 2;
             // Draw table headers
-            drawStringSafe(guiGraphics, Component.literal("Player"), cx - 235, 50, 0xFFFFFF55);
-            drawStringSafe(guiGraphics, Component.literal("Time"), cx - 120, 50, 0xFFFFFF55);
-            drawStringSafe(guiGraphics, Component.literal("Item"), cx - 55, 50, 0xFFFFFF55);
-            drawStringSafe(guiGraphics, Component.literal("Modifier"), cx + 45, 50, 0xFFFFFF55);
-            drawStringSafe(guiGraphics, Component.literal("Seed"), cx + 120, 50, 0xFFFFFF55);
+            drawStringSafe(guiGraphics, Component.translatable("scav_rating.gui.player"), cx - 235, 50, 0xFFFFFF55);
+            drawStringSafe(guiGraphics, Component.translatable("scav_rating.gui.time"), cx - 120, 50, 0xFFFFFF55);
+            drawStringSafe(guiGraphics, Component.translatable("scav_rating.gui.item"), cx - 55, 50, 0xFFFFFF55);
+            drawStringSafe(guiGraphics, Component.translatable("scav_rating.gui.modifier"), cx + 45, 50, 0xFFFFFF55);
+            drawStringSafe(guiGraphics, Component.translatable("scav_rating.gui.seed"), cx + 120, 50, 0xFFFFFF55);
 
             int y = 65;
             for (int i = 0; i < leaderboardData.size() && i < 10; i++) {
@@ -150,8 +154,8 @@ public class LeaderboardScreen extends Screen {
 
                 drawStringSafe(guiGraphics, Component.literal(String.format("%d. %s", i + 1, name)), cx - 235, y, rowColor);
                 drawStringSafe(guiGraphics, Component.literal(timeStr), cx - 120, y, rowColor);
-                drawStringSafe(guiGraphics, Component.literal(itemShort), cx - 55, y, rowColor);
-                drawStringSafe(guiGraphics, Component.literal(modShort), cx + 45, y, rowColor);
+                drawStringSafe(guiGraphics, Component.translatable(getItemSafe(itemStr).getDescriptionId()), cx - 55, y, rowColor);
+                drawStringSafe(guiGraphics, Component.translatable("scavenger.modifier." + modShort), cx + 45, y, rowColor);
                 drawStringSafe(guiGraphics, Component.literal(seedStr), cx + 120, y, seedColor);
                 y += 15;
             }

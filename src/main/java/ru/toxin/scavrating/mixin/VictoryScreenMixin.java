@@ -23,7 +23,7 @@ public abstract class VictoryScreenMixin extends Screen {
         String itemId = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(ClientScavengerData.item).toString();
         String modId = ClientScavengerData.modifier.toString();
         
-        this.addRenderableWidget(Button.builder(Component.literal("Leaderboard"), b -> {
+        this.addRenderableWidget(Button.builder(Component.translatable("scav_rating.gui.leaderboard"), b -> {
             Minecraft.getInstance().setScreen(new LeaderboardScreen(this, itemId, modId, null));
         }).bounds(this.width / 2 - 100, this.height - 30, 200, 20).build());
     }

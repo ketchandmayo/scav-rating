@@ -22,7 +22,7 @@ public class FilterSelectionScreen extends Screen {
     private final int itemsPerPage = 20;
 
     public FilterSelectionScreen(Screen parent, boolean isItemFilter, List<String> options, String currentSelection, Consumer<String> onSelected) {
-        super(Component.literal(isItemFilter ? "Select Item Filter" : "Select Modifier Filter"));
+        super(Component.translatable(isItemFilter ? "scav_rating.gui.select_item" : "scav_rating.gui.select_modifier"));
         this.parent = parent;
         this.isItemFilter = isItemFilter;
         this.options = options;
@@ -34,24 +34,24 @@ public class FilterSelectionScreen extends Screen {
     protected void init() {
         this.clearWidgets();
         
-        this.addRenderableWidget(Button.builder(Component.literal("Back"), b -> {
+        this.addRenderableWidget(Button.builder(Component.translatable("scav_rating.gui.back"), b -> {
             this.minecraft.setScreen(parent);
         }).bounds(this.width / 2 - 100, this.height - 30, 200, 20).build());
 
-        this.addRenderableWidget(Button.builder(Component.literal("All"), b -> {
+        this.addRenderableWidget(Button.builder(Component.translatable("scav_rating.gui.all"), b -> {
             onSelected.accept("");
             this.minecraft.setScreen(parent);
         }).bounds(this.width / 2 - 100, 30, 200, 20).build());
 
         int totalPages = (int) Math.ceil((double) options.size() / itemsPerPage);
         if (currentPage > 0) {
-            this.addRenderableWidget(Button.builder(Component.literal("< Prev"), b -> {
+            this.addRenderableWidget(Button.builder(Component.translatable("scav_rating.gui.prev"), b -> {
                 currentPage--;
                 this.init();
             }).bounds(this.width / 2 - 160, 30, 50, 20).build());
         }
         if (currentPage < totalPages - 1) {
-            this.addRenderableWidget(Button.builder(Component.literal("Next >"), b -> {
+            this.addRenderableWidget(Button.builder(Component.translatable("scav_rating.gui.next"), b -> {
                 currentPage++;
                 this.init();
             }).bounds(this.width / 2 + 110, 30, 50, 20).build());
@@ -86,7 +86,7 @@ public class FilterSelectionScreen extends Screen {
                     this.minecraft.setScreen(parent);
                 }).bounds(bx, by, buttonWidth, buttonHeight).build());
             } else {
-                this.addRenderableWidget(Button.builder(Component.literal(shortName), b -> {
+                this.addRenderableWidget(Button.builder(Component.translatable("scavenger.modifier." + shortName), b -> {
                     onSelected.accept(optionId);
                     this.minecraft.setScreen(parent);
                 }).bounds(bx, by, buttonWidth, buttonHeight).build());
@@ -142,7 +142,7 @@ public class FilterSelectionScreen extends Screen {
                     guiGraphics.renderItem(stack, bx + 4, by + 4);
                     
                     if (mouseX >= bx && mouseX < bx + buttonWidth && mouseY >= by && mouseY < by + buttonHeight) {
-                        guiGraphics.renderTooltip(this.font, Component.literal(optionId), mouseX, mouseY);
+                        guiGraphics.renderTooltip(this.font, Component.translatable(item.getDescriptionId()), mouseX, mouseY);
                     }
                 } catch (Exception e) {}
             }

@@ -1,0 +1,17 @@
+{
+  "scav_rating.gui.leaderboard": "Leaderboard",
+  "scav_rating.gui.player": "Player",
+  "scav_rating.gui.time": "Time",
+  "scav_rating.gui.item": "Item",
+  "scav_rating.gui.modifier": "Modifier",
+  "scav_rating.gui.seed": "Seed",
+  "scav_rating.gui.loading": "Loading...",
+  "scav_rating.gui.no_runs": "No runs found for these filters.",
+  "scav_rating.gui.start_run": "Start Run",
+  "scav_rating.gui.back": "Back",
+  "scav_rating.gui.all": "All",
+  "scav_rating.gui.select_item": "Select Item Filter",
+  "scav_rating.gui.select_modifier": "Select Modifier Filter",
+  "scav_rating.gui.prev": "< Prev",
+  "scav_rating.gui.next": "Next >"
+}
