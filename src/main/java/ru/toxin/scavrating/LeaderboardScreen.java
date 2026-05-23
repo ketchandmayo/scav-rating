@@ -71,11 +71,11 @@ public class LeaderboardScreen extends Screen {
         } else {
             int cx = this.width / 2;
             // Draw table headers
-            drawStringSafe(guiGraphics, Component.literal("Player"), cx - 180, 50, 0xFFFFFF55);
-            drawStringSafe(guiGraphics, Component.literal("Time"), cx - 60, 50, 0xFFFFFF55);
-            drawStringSafe(guiGraphics, Component.literal("Item"), cx + 5, 50, 0xFFFFFF55);
-            drawStringSafe(guiGraphics, Component.literal("Modifier"), cx + 105, 50, 0xFFFFFF55);
-            drawStringSafe(guiGraphics, Component.literal("Seed"), cx + 175, 50, 0xFFFFFF55);
+            drawStringSafe(guiGraphics, Component.literal("Player"), cx - 235, 50, 0xFFFFFF55);
+            drawStringSafe(guiGraphics, Component.literal("Time"), cx - 120, 50, 0xFFFFFF55);
+            drawStringSafe(guiGraphics, Component.literal("Item"), cx - 55, 50, 0xFFFFFF55);
+            drawStringSafe(guiGraphics, Component.literal("Modifier"), cx + 45, 50, 0xFFFFFF55);
+            drawStringSafe(guiGraphics, Component.literal("Seed"), cx + 120, 50, 0xFFFFFF55);
 
             int y = 65;
             for (int i = 0; i < leaderboardData.size() && i < 10; i++) {
@@ -90,11 +90,18 @@ public class LeaderboardScreen extends Screen {
                 String itemShort = itemStr.contains(":") ? itemStr.substring(itemStr.indexOf(":") + 1) : itemStr;
                 String modShort = modStr.contains(":") ? modStr.substring(modStr.indexOf(":") + 1) : modStr;
 
-                drawStringSafe(guiGraphics, Component.literal(String.format("%d. %s", i + 1, name)), cx - 180, y, 0xFFFFFFFF);
-                drawStringSafe(guiGraphics, Component.literal(timeStr), cx - 60, y, 0xFFFFFFFF);
-                drawStringSafe(guiGraphics, Component.literal(itemShort), cx + 5, y, 0xFFFFFFFF);
-                drawStringSafe(guiGraphics, Component.literal(modShort), cx + 105, y, 0xFFFFFFFF);
-                drawStringSafe(guiGraphics, Component.literal(seedStr), cx + 175, y, 0xFFAAAAAA);
+                int rowColor = 0xFFFFFFFF;
+                if (i == 0) rowColor = 0xFFFFD700; // Gold
+                else if (i == 1) rowColor = 0xFFC0C0C0; // Silver
+                else if (i == 2) rowColor = 0xFFCD7F32; // Bronze
+
+                int seedColor = i < 3 ? rowColor : 0xFFAAAAAA;
+
+                drawStringSafe(guiGraphics, Component.literal(String.format("%d. %s", i + 1, name)), cx - 235, y, rowColor);
+                drawStringSafe(guiGraphics, Component.literal(timeStr), cx - 120, y, rowColor);
+                drawStringSafe(guiGraphics, Component.literal(itemShort), cx - 55, y, rowColor);
+                drawStringSafe(guiGraphics, Component.literal(modShort), cx + 45, y, rowColor);
+                drawStringSafe(guiGraphics, Component.literal(seedStr), cx + 120, y, seedColor);
                 y += 15;
             }
         }
