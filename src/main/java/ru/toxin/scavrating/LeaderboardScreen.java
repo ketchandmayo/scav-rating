@@ -63,7 +63,7 @@ public class LeaderboardScreen extends Screen {
         Component itemLabel = Component.translatable("scav_rating.gui.item").append(": ")
                 .append(filterItemId.isEmpty() ? Component.translatable("scav_rating.gui.all") : Component.translatable(getItemSafe(filterItemId).getDescriptionId()));
         this.addRenderableWidget(Button.builder(itemLabel, b -> {
-            this.minecraft.setScreen(new FilterSelectionScreen(this, true, availableItems, filterItemId, selected -> {
+            this.minecraft.setScreen(new FilterSelectionScreen(this, true, availableItems, this.itemId, selected -> {
                 this.filterItemId = selected;
                 this.refreshData();
             }));
@@ -72,7 +72,7 @@ public class LeaderboardScreen extends Screen {
         Component modLabel = Component.translatable("scav_rating.gui.modifier").append(": ")
                 .append(filterModifierId.isEmpty() ? Component.translatable("scav_rating.gui.all") : Component.translatable("scavenger.modifier." + getShortName(filterModifierId)));
         this.addRenderableWidget(Button.builder(modLabel, b -> {
-            this.minecraft.setScreen(new FilterSelectionScreen(this, false, availableModifiers, filterModifierId, selected -> {
+            this.minecraft.setScreen(new FilterSelectionScreen(this, false, availableModifiers, this.modifierId, selected -> {
                 this.filterModifierId = selected;
                 this.refreshData();
             }));
