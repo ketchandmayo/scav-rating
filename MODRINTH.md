@@ -15,6 +15,8 @@ Have you ever wanted to know who the fastest Scavenger player is? Now you can! T
 - **Fabric Loader** & **Fabric API**
 - **Scavenger mod** (Required dependency)
 
+> **Note:** A NeoForge version is coming soon!
+
 ### 🐛 Issues & Support
 If you find a bug or have a suggestion, please report it on our [GitHub Issues](https://github.com/ketchandmayo/scav-rating/issues) page.
 

@@ -14,6 +14,8 @@ A Fabric addon for the Scavenger mod that adds global speedrun leaderboards! Com
 - Fabric API
 - Scavenger mod
 
+> **Note:** A NeoForge version is coming soon!
+
 ## Installation
 1. Download the latest release from Modrinth or the [Releases](https://github.com/ketchandmayo/scav-rating/releases) page.
 2. Drop the `.jar` file into your `.minecraft/mods` folder.
